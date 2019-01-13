@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "51328148909",
+    "firebase_url": "https://issuetrackingsystem-b6cad.firebaseio.com",
+    "project_id": "issuetrackingsystem-b6cad",
+    "storage_bucket": "issuetrackingsystem-b6cad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51328148909:android:cb49835da8fed0ad",
+        "android_client_info": {
+          "package_name": "com.ayushbherwani.ticketsupportsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51328148909-to937qsrfa7f8b52h2v95779fmg2bm5e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ayushbherwani.ticketsupportsystem",
+            "certificate_hash": "d0bc723ffe8eb39662abcf85553a2fd23f51c17b"
+          }
+        },
+        {
+          "client_id": "51328148909-9vtporcu22pav8uk37dnb5v2vohmur5r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGajOVUJK2FY9AuMgzxaCGYaWR6g0T3nM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51328148909-9vtporcu22pav8uk37dnb5v2vohmur5r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
