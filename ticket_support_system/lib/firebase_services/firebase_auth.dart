@@ -9,6 +9,8 @@ abstract class FireBaseAuth {
   Future<FirebaseUser> getCurrentUser();
 
   Future<void> signOut();
+
+  Future<void> forgotPassword(String emailId);
 }
 
 class Auth implements FireBaseAuth {
@@ -33,5 +35,9 @@ class Auth implements FireBaseAuth {
 
   Future<void> signOut() async {
     return _firebaseAuth.signOut();
+  }
+
+  Future<void> forgotPassword(String emailId)async{
+    return _firebaseAuth.sendPasswordResetEmail(email: emailId);
   }
 }
