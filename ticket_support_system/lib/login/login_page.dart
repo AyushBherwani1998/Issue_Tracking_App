@@ -3,9 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import './theme.dart' as Theme;
 import './bubble_indication_painter.dart';
+import 'package:ticket_support_system/firebase_services/firebase_auth.dart';
+import 'package:progress_indicators/progress_indicators.dart';
+import 'forget_password.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key}) : super(key: key);
+  LoginPage({this.auth, this.onSignedIn,Key key,}) : super(key: key);
+  final FireBaseAuth auth;
+  final VoidCallback onSignedIn;
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -13,7 +18,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  String _errorMessage;
+  bool _isLoading = false;
 
   final FocusNode myFocusNodeEmailLogin = FocusNode();
   final FocusNode myFocusNodePasswordLogin = FocusNode();
@@ -110,6 +119,8 @@ class _LoginPageState extends State<LoginPage>
   @override
   void initState() {
     super.initState();
+    _errorMessage = "";
+    _isLoading = false;
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -269,6 +280,7 @@ class _LoginPageState extends State<LoginPage>
                   ),
                 ),
               ),
+              _showProgressBar(),
               Container(
                 margin: EdgeInsets.only(top: 170.0),
                 decoration: new BoxDecoration(
@@ -296,14 +308,24 @@ class _LoginPageState extends State<LoginPage>
                             fontFamily: "WorkSansBold"),
                       ),
                     ),
-                    onPressed: () => showInSnackBar("Login button pressed")),
+                    onPressed: (){
+                      showInSnackBar("Login button pressed");
+                      LogingInUser();
+                    }),
               ),
+
+
             ],
           ),
           Padding(
             padding: EdgeInsets.only(top: 10.0),
             child: FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ForgotPassword()),
+                  );
+                },
                 child: Text(
                   "Forgot Password?",
                   style: TextStyle(
@@ -508,7 +530,9 @@ class _LoginPageState extends State<LoginPage>
           Padding(
             padding: EdgeInsets.only(top: 10.0),
             child: FlatButton(
-                onPressed: () {},
+                onPressed: () {
+
+                },
                 child: Text(
                   "Forgot Password?",
                   style: TextStyle(
@@ -543,5 +567,39 @@ class _LoginPageState extends State<LoginPage>
     setState(() {
       _obscureTextLoginAdmin = !_obscureTextLoginAdmin;
     });
+  }
+
+  void LogingInUser()async{
+    setState(() {
+      _errorMessage = "";
+      _isLoading = true;
+    });
+
+    try{
+      String  userId="";
+      userId = await widget.auth.signIn(loginEmailController.text.toString(), loginPasswordController.text.toString());
+      print("Signed in: $userId");
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (userId.length > 0 && userId != null) {
+        widget.onSignedIn();
+      }
+    }catch(e){
+      print("Error : $e");
+      setState(() {
+        _isLoading = false;
+        _errorMessage = e.message;
+        showInSnackBar(_errorMessage);
+      });
+    }
+  }
+
+  Widget _showProgressBar(){
+    if(_isLoading){
+        return Container( width: 300.0,height: 190.0,
+        child: Opacity(opacity: 0.5,child: JumpingDotsProgressIndicator(fontSize: 50.0,),));
+    }return Container(height: 0.0,width: 0.0,);
   }
 }

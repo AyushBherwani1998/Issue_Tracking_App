@@ -32,9 +32,9 @@ class FireBaseAuthPage extends State<FireBaseAuthClass>{
     widget.auth.getCurrentUser().then((user){
       setState(() {
         if(user != null){
-          _userId = user.uid;
+          _userId = user?.uid;
         }
-        authStatus = user.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+        authStatus = user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
     });
   }
@@ -53,8 +53,10 @@ class FireBaseAuthPage extends State<FireBaseAuthClass>{
 
   void _onSignedOut(){
     widget.auth.getCurrentUser().then((user){
-      authStatus = AuthStatus.NOT_LOGGED_IN;
-      _userId = "";
+      setState(() {
+        authStatus = AuthStatus.NOT_LOGGED_IN;
+        _userId = "";
+      });
     });
   }
 
@@ -76,11 +78,14 @@ class FireBaseAuthPage extends State<FireBaseAuthClass>{
         return _waitingScreen();
         break;
       case AuthStatus.NOT_LOGGED_IN:
-        return LoginPage();
+        return LoginPage(
+          auth: widget.auth,
+          onSignedIn : _onLoggedIn
+        );
         break;
       case AuthStatus.LOGGED_IN:
         if(_userId.length > 0 && _userId != null){
-          return Home();
+          return Home(userId: _userId,auth: widget.auth,onSignedOut: _onSignedOut,);
         }else return _waitingScreen();
         break;
       default:
